@@ -53,20 +53,31 @@ class node:
     # Este metodo define que la prioridad sea formada
     # en el costo de las variables de los objetos
     def __lt__(self, nxt):
-        return self.cost < nxt.cost
+        return (self.cost + self.level) < (nxt.cost + nxt.level)
 
 # Hacemos una funcion para calcular el numero de 
 # espacios mal colocados, el numero de los espacios llenos
 # que no esten en su meta
 def calculateCost(mat, final) -> int:
 
-    count = 0
+    cost = 0
     for i in range(n):
         for j in range(n):
-            if ((mat[i][j]) and
-                (mat[i][j] != final[i][j])):
-                count += 1
-    return count
+            if mat[i][j] != 0:
+                goal_pos = [(x, y) for x in range(n) for y in range(n) if final[x][y] == mat[i][j]]
+                if goal_pos:
+                    goal_x, goal_y = goal_pos[0]
+
+                    cost += abs(i - goal_x) + abs(j - goal_y)
+                else :
+                    raise ValueError(f"Value {mat[i][j]} not found in the final matrix.")
+
+    return cost
+
+            # if ((mat[i][j]) and
+            #     (mat[i][j] != final[i][j])):
+            #     count += 1
+    #return count
 
 def newNode(mat, empty_tile_pos, new_empty_tile_pos,
             level, parent, final) -> node:
@@ -122,20 +133,24 @@ def solve(initial, empty_tile_pos, final):
     # Añade la raiz a la lista de nodos
     pq.push(root)
 
+    visited = set()
+    visited.add(tuple(tuple(row) for row in initial))
     # Encuentra el nodo con el menor costo
     # añade la lista hijo a la lista de nodos y lo
     # borra de la lista
-    
     while not pq.empty():
 
         # Encuentra el nodo con menor costo
         # estimado y lo borra de la lista de nodos
         minimum = pq.pop()
 
+        print(f"Step {minimum.level + 1} Level = {minimum.level}, Cost = {minimum.cost}, Total = {minimum.level + minimum.cost}")
+
         # Si la respuesta es minima
         if minimum.cost == 0:
-
+            
             # Imprime el camino de raiz al destino
+            print("La solucion: ")
             printPath(minimum)
             return
         
@@ -157,17 +172,12 @@ def solve(initial, empty_tile_pos, final):
                                 minimum, final,)
                 
                 # añade un hijo a la lista de nodos
-                pq.push(child)
-# print("Please enter the numbers for the puzzle configuration:")
-# num1 = int(input(" "))
-# num2 = int(input("| "))
-# num3 = int(input("| "))
-# num4 = int(input(" "))
-# num5 = int(input("| "))
-# num6 = int(input("| "))
-# num7 = int(input(" "))
-# num8 = int(input("| "))
-# num9 = int(input("| "))
+                # pq.push(child)
+                child_state = tuple(tuple(row) for row in child.mat)
+                if child_state not in visited:
+                    pq.push(child)
+                    visited.add(child_state)
+
 print("Please enter the numbers for the puzzle configuration:")
 row1 = input(": ").split('|')
 row2 = input(": ").split('|')
@@ -175,18 +185,23 @@ row3 = input(": ").split('|')
 
 # Configuracion inicial
 # 0 Representa el espacio vacio
-initial = [ [int(x.strip()) for x in row1],
+initial = [ 
+    [int(x.strip()) for x in row1],
     [int(x.strip()) for x in row2],
-    [int(x.strip()) for x in row3]]
+    [int(x.strip()) for x in row3]
+    ]
 
-# print("The initial puzzle configuration is:")
-# for row in initial:
-#     print(" | ".join(map(str, row)))
+print("\nPlease enter the numbers for the final puzzle configuration:")
+row1_final = input(": ").split('|')
+row2_final = input(": ").split('|')
+row3_final = input(": ").split('|')
 
 # Resuelve la configuracion final
-final = [ [1, 2, 3],
-                [4, 5, 6],
-                [7, 8, 0]]
+final = [ 
+    [int(x.strip()) for x in row1_final],
+    [int(x.strip()) for x in row2_final],
+    [int(x.strip()) for x in row3_final]
+                ]
 # Coordina los espacios en blanco en
 # la configuracion inicial
 empty_tile_pos = [
