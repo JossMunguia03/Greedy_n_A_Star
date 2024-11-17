@@ -178,7 +178,7 @@ def solve(initial, empty_tile_pos, final):
                     pq.push(child)
                     visited.add(child_state)
 
-print("Please enter the numbers for the puzzle configuration:")
+print("Ingrese la configuracion inicial de la matriz, 3 numeros por linea separados por espacio, 0 equivale al espacio vacio:")
 row1 = input(": ").split(' ')
 row2 = input(": ").split(' ')
 row3 = input(": ").split(' ')
@@ -191,7 +191,7 @@ initial = [
     [int(x.strip()) for x in row3]
     ]
 
-print("\nPlease enter the numbers for the final puzzle configuration:")
+print("\nSiguiendo las mismas reglas ingrese la configuracion matriz final")
 row1_final = input(": ").split(' ')
 row2_final = input(": ").split(' ')
 row3_final = input(": ").split(' ')
