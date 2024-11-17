@@ -179,9 +179,9 @@ def solve(initial, empty_tile_pos, final):
                     visited.add(child_state)
 
 print("Please enter the numbers for the puzzle configuration:")
-row1 = input(": ").split('|')
-row2 = input(": ").split('|')
-row3 = input(": ").split('|')
+row1 = input(": ").split(' ')
+row2 = input(": ").split(' ')
+row3 = input(": ").split(' ')
 
 # Configuracion inicial
 # 0 Representa el espacio vacio
@@ -192,9 +192,9 @@ initial = [
     ]
 
 print("\nPlease enter the numbers for the final puzzle configuration:")
-row1_final = input(": ").split('|')
-row2_final = input(": ").split('|')
-row3_final = input(": ").split('|')
+row1_final = input(": ").split(' ')
+row2_final = input(": ").split(' ')
+row3_final = input(": ").split(' ')
 
 # Resuelve la configuracion final
 final = [ 
